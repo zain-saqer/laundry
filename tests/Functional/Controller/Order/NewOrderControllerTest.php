@@ -14,46 +14,66 @@ class NewOrderControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('POST', '/orders/v1/order', content: '
-{
-    "comment": "comment",
-    "pickupDate": 0
-}
-');
+        $client->request('GET', '/orders/new-order');
 
         $this->assertResponseIsSuccessful();
+
+        $client->submitForm('Create', [
+            'new_order_from[numberOfLoads]' => 1,
+            'new_order_from[pickupDate][month]' => 1,
+            'new_order_from[pickupDate][day]' => 1,
+            'new_order_from[pickupDate][year]' => 2017,
+            'new_order_from[timeOfDay]' => '9-12',
+        ]);
+
+        $this->assertResponseStatusCodeSame(302);
     }
 
     /**
-     * @dataProvider badRequestContentProvider
+     * @dataProvider badFormData
      */
-    public function testNewOrderReturnsBadRequestIfDataBad(string $content, int $response): void
+    public function testNewOrderThrowInvalidArgumnetForBadRequestData($formData): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $client = static::createClient();
 
-        $client->request('POST', '/orders/v1/order', content: $content);
+        $client->request('GET', '/orders/new-order');
 
-        $this->assertResponseStatusCodeSame(400);
+        $this->assertResponseIsSuccessful();
+
+        $client->submitForm('Create', $formData);
     }
 
-    public function badRequestContentProvider(): array
+    public function badFormData(): array
     {
         return [
             [
-                '',
-                400,
+                [
+                    'new_order_from[numberOfLoads]' => 0,
+                    'new_order_from[pickupDate][month]' => 1,
+                    'new_order_from[pickupDate][day]' => 1,
+                    'new_order_from[pickupDate][year]' => 2022,
+                    'new_order_from[timeOfDay]' => '9-162',
+                ],
             ],
             [
-                '{',
-                400,
+                [
+                    'new_order_from[numberOfLoads]' => 1,
+                    'new_order_from[pickupDate][month]' => 1,
+                    'new_order_from[pickupDate][day]' => 1,
+                    'new_order_from[pickupDate][year]' => 123,
+                    'new_order_from[timeOfDay]' => '9-162',
+                ],
             ],
             [
-                '{}',
-                422,
-            ],
-            [
-                '{"comment":""}',
-                422,
+                [
+                    'new_order_from[numberOfLoads]' => 1,
+                    'new_order_from[pickupDate][month]' => 1,
+                    'new_order_from[pickupDate][day]' => 1,
+                    'new_order_from[pickupDate][year]' => 2022,
+                    'new_order_from[timeOfDay]' => '9',
+                ],
             ],
         ];
     }

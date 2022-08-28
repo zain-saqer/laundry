@@ -10,7 +10,7 @@ class CreateOrderRequest
         public readonly int $numberOfLoads,
         public readonly DateTimeImmutable $pickupDate,
         public readonly string $timeOfDay,
-        public readonly string $comment,
+        public readonly ?string $comment,
     ) {
     }
 }

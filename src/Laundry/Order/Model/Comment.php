@@ -5,7 +5,7 @@ namespace App\Laundry\Order\Model;
 class Comment
 {
     private function __construct(
-        private readonly string $comment
+        private readonly ?string $comment
     ) {
     }
 
@@ -14,7 +14,7 @@ class Comment
         return $this->comment;
     }
 
-    public static function fromString(string $comment): self
+    public static function fromString(?string $comment): self
     {
         return new self($comment);
     }
