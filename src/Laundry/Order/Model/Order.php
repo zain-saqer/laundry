@@ -6,8 +6,10 @@ class Order
 {
     public function __construct(
         public readonly OrderId $orderId,
-        public readonly Comment $comment,
+        public readonly NumberOfLoads $numberOfLoads,
         public readonly PickupDate $pickupDate,
+        public readonly TimeOfDay $timeOfDay,
+        public readonly Comment $comment,
     ) {
     }
 }

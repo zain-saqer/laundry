@@ -4,8 +4,10 @@ namespace App\Tests\Unit\Order\Storage;
 
 use App\Laundry\Order\Entity\Order;
 use App\Laundry\Order\Model\Comment;
+use App\Laundry\Order\Model\NumberOfLoads;
 use App\Laundry\Order\Model\OrderId;
 use App\Laundry\Order\Model\PickupDate;
+use App\Laundry\Order\Model\TimeOfDay;
 use App\Laundry\Order\OrderRepositoryUsingMemory;
 use App\Laundry\Order\Storage\OrderNotFoundException;
 use PHPUnit\Framework\TestCase;
@@ -22,11 +24,15 @@ class OrderRepositoryUsingMemoryTest extends TestCase
         $id = OrderId::fromUuid(UUid::uuid4());
         $comment = Comment::fromString('comment');
         $pickupDate = PickupDate::fromDateTime(new \DateTimeImmutable());
+        $numberOfDays = NumberOfLoads::fromInt(1);
+        $timeOfDay = TimeOfDay::fromString(TimeOfDay::T_9_TO_12);
 
         $order = new Order(
-            $id,
-            $comment,
-            $pickupDate,
+            id: $id,
+            numberOfLoads: $numberOfDays,
+            pickupDate: $pickupDate,
+            timeOfDay: $timeOfDay,
+            comment: $comment,
         );
 
         $repo = new OrderRepositoryUsingMemory();
@@ -37,9 +43,11 @@ class OrderRepositoryUsingMemoryTest extends TestCase
 
         static::assertEquals(
             new \App\Laundry\Order\Model\Order(
-                $id,
-                $comment,
-                $pickupDate,
+                orderId: $id,
+                numberOfLoads: $numberOfDays,
+                pickupDate: $pickupDate,
+                timeOfDay: $timeOfDay,
+                comment: $comment,
             ),
             $orderViewModel
         );

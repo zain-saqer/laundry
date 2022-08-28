@@ -30,8 +30,10 @@ class OrderRepositoryUsingMemory implements OrderRepositoryInterface
 
         return new Model\Order(
             orderId: $orderData['id'],
-            comment: $orderData['comment'],
+            numberOfLoads: $orderData['number_of_loads'],
             pickupDate: $orderData['pickup_date'],
+            timeOfDay: $orderData['time_of_day'],
+            comment: $orderData['comment'],
         );
     }
 
