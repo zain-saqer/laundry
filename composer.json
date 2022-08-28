@@ -95,6 +95,9 @@
         ],
         "php-cs-fix": [
             "vendor/bin/php-cs-fixer fix"
+        ],
+        "clear-cache": [
+            "docker-compose run php php bin/console cache:warmup --env=prod"
         ]
     },
     "conflict": {
