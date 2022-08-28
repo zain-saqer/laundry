@@ -31,6 +31,8 @@ class NewOrderControllerTest extends WebTestCase
 
     /**
      * @dataProvider badFormData
+     *
+     * @param mixed $formData
      */
     public function testNewOrderThrowInvalidArgumnetForBadRequestData($formData): void
     {
