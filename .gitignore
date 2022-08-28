@@ -31,3 +31,4 @@
 ###> bref/symfony-bridge ###
 /.serverless/
 ###< bref/symfony-bridge ###
+/node_modules/
