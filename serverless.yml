@@ -15,7 +15,8 @@ provider:
         APP_ENV: prod
 
 plugins:
-    - ./vendor/bref/bref
+  - ./vendor/bref/bref
+  - serverless-lift
 
 functions:
     # This function runs the Symfony website/API
@@ -26,13 +27,6 @@ functions:
             - ${bref:layer.php-81-fpm}
         events:
             - httpApi: '*'
-    # This function let us run console commands in Lambda
-    console:
-        handler: bin/console
-        timeout: 120 # in seconds
-        layers:
-            - ${bref:layer.php-80} # PHP
-            - ${bref:layer.console} # The "console" layer
 
 package:
     patterns:
@@ -45,5 +39,9 @@ package:
         # If you want to include files and folders that are part of excluded folders,
         # add them at the end
         - 'var/cache/prod/**'
-        - 'public/build/entrypoints.json'
-        - 'public/build/manifest.json'
+
+constructs:
+    laundry-website:
+        type: server-side-website
+        assets:
+            '/assets/*': public/assets
